@@ -1,6 +1,5 @@
 package toml
 
-import "conv"
 import "testing"
 
 fn test_parse_string(t *testing.T) void {
@@ -48,7 +47,7 @@ fn test_parse_negative_integer(t *testing.T) void {
         testing.fail(t, "get_int failed")
         return
     }
-    testing.equal[i64](t, val, 0 - conv.to_i64(42))
+    testing.equal[i64](t, val, -42)
 }
 
 fn test_parse_bool(t *testing.T) void {

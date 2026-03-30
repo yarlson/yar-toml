@@ -22,10 +22,7 @@ pub fn get(v Value, key str) !Value {
     case Value.Table(t) {
         return t.entries[key]
     }
-    case Value.String(_) { return error.TypeError }
-    case Value.Integer(_) { return error.TypeError }
-    case Value.Boolean(_) { return error.TypeError }
-    case Value.Array(_) { return error.TypeError }
+    else { return error.TypeError }
     }
 }
 
@@ -50,10 +47,7 @@ pub fn get_table(v Value, key str) !Value {
     case Value.Table(_) {
         return inner
     }
-    case Value.String(_) { return error.TypeError }
-    case Value.Integer(_) { return error.TypeError }
-    case Value.Boolean(_) { return error.TypeError }
-    case Value.Array(_) { return error.TypeError }
+    else { return error.TypeError }
     }
 }
 
@@ -65,49 +59,34 @@ pub fn get_array(v Value, key str) ![]Value {
 pub fn as_str(v Value) !str {
     match v {
     case Value.String(s) { return s.val }
-    case Value.Integer(_) { return error.TypeError }
-    case Value.Boolean(_) { return error.TypeError }
-    case Value.Array(_) { return error.TypeError }
-    case Value.Table(_) { return error.TypeError }
+    else { return error.TypeError }
     }
 }
 
 pub fn as_int(v Value) !i64 {
     match v {
     case Value.Integer(i) { return i.val }
-    case Value.String(_) { return error.TypeError }
-    case Value.Boolean(_) { return error.TypeError }
-    case Value.Array(_) { return error.TypeError }
-    case Value.Table(_) { return error.TypeError }
+    else { return error.TypeError }
     }
 }
 
 pub fn as_bool(v Value) !bool {
     match v {
     case Value.Boolean(b) { return b.val }
-    case Value.String(_) { return error.TypeError }
-    case Value.Integer(_) { return error.TypeError }
-    case Value.Array(_) { return error.TypeError }
-    case Value.Table(_) { return error.TypeError }
+    else { return error.TypeError }
     }
 }
 
 pub fn as_array(v Value) ![]Value {
     match v {
     case Value.Array(a) { return a.items }
-    case Value.String(_) { return error.TypeError }
-    case Value.Integer(_) { return error.TypeError }
-    case Value.Boolean(_) { return error.TypeError }
-    case Value.Table(_) { return error.TypeError }
+    else { return error.TypeError }
     }
 }
 
 pub fn as_table(v Value) !map[str]Value {
     match v {
     case Value.Table(t) { return t.entries }
-    case Value.String(_) { return error.TypeError }
-    case Value.Integer(_) { return error.TypeError }
-    case Value.Boolean(_) { return error.TypeError }
-    case Value.Array(_) { return error.TypeError }
+    else { return error.TypeError }
     }
 }

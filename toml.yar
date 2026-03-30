@@ -9,7 +9,7 @@ pub enum Value {
 }
 
 pub fn new_table() Value {
-    return Value.Table{entries: map[str]Value{}}
+    return Value.Table(map[str]Value{})
 }
 
 pub fn parse(input str) !Value {

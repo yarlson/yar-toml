@@ -36,7 +36,7 @@ fn p_peek(p *Parser) i32 {
 }
 
 fn p_advance(p *Parser) void {
-    p.pos = p.pos + 1
+    p.pos += 1
 }
 
 fn p_expect(p *Parser, expected i32) !void {
@@ -99,15 +99,15 @@ fn p_parse_value(p *Parser) !Value {
     b := p_peek(p)
     if b == '"' {
         s := p_parse_string(p)?
-        return Value.String{val: s}
+        return Value.String(s)
     }
     if b == 't' || b == 'f' {
         val := p_parse_bool(p)?
-        return Value.Boolean{val: val}
+        return Value.Boolean(val)
     }
     if is_digit(b) || b == '+' || b == '-' {
         n := p_parse_integer(p)?
-        return Value.Integer{val: n}
+        return Value.Integer(n)
     }
     if b == '[' {
         return p_parse_array(p)
@@ -174,18 +174,18 @@ fn p_parse_integer(p *Parser) !i64 {
         p_advance(p)
     }
     if negative {
-        return 0 - result
+        return -result
     }
     return result
 }
 
 fn p_parse_bool(p *Parser) !bool {
     if p_starts_with(p, "true") {
-        p.pos = p.pos + 4
+        p.pos += 4
         return true
     }
     if p_starts_with(p, "false") {
-        p.pos = p.pos + 5
+        p.pos += 5
         return false
     }
     return error.ParseError
@@ -197,7 +197,7 @@ fn p_parse_array(p *Parser) !Value {
     p_skip_insignificant(p)
     if !p_at_end(p) && p_peek(p) == ']' {
         p_advance(p)
-        return Value.Array{items: items}
+        return Value.Array(items)
     }
     val := p_parse_value(p)?
     items = append(items, val)
@@ -215,7 +215,7 @@ fn p_parse_array(p *Parser) !Value {
         items = append(items, val)
     }
     p_expect(p, ']')?
-    return Value.Array{items: items}
+    return Value.Array(items)
 }
 
 fn p_parse_inline_table(p *Parser) !Value {
@@ -224,7 +224,7 @@ fn p_parse_inline_table(p *Parser) !Value {
     p_skip_ws(p)
     if !p_at_end(p) && p_peek(p) == '}' {
         p_advance(p)
-        return Value.Table{entries: entries}
+        return Value.Table(entries)
     }
     key_path := p_parse_key_path(p)?
     p_skip_ws(p)
@@ -250,7 +250,7 @@ fn p_parse_inline_table(p *Parser) !Value {
         set_nested(entries, key_path, val)?
     }
     p_expect(p, '}')?
-    return Value.Table{entries: entries}
+    return Value.Table(entries)
 }
 
 // --- Key parsing ---
@@ -302,10 +302,10 @@ fn ensure_table(root map[str]Value, path []str) !map[str]Value {
             }
         } else {
             sub := map[str]Value{}
-            current[key] = Value.Table{entries: sub}
+            current[key] = Value.Table(sub)
             current = sub
         }
-        i = i + 1
+        i += 1
     }
     return current
 }
@@ -325,10 +325,10 @@ fn set_nested(entries map[str]Value, path []str, val Value) !void {
             }
         } else {
             sub := map[str]Value{}
-            current[key] = Value.Table{entries: sub}
+            current[key] = Value.Table(sub)
             current = sub
         }
-        i = i + 1
+        i += 1
     }
     last := path[len(path) - 1]
     current[last] = val

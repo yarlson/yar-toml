@@ -196,7 +196,7 @@ fn test_parse_yar_toml(t *testing.T) void {
 }
 
 fn test_as_str_type_error(t *testing.T) void {
-    val := Value.Integer{val: 42}
+    val := Value.Integer(42)
     as_str(val) or |err| {
         testing.equal[error](t, err, error.TypeError)
         return
@@ -205,7 +205,7 @@ fn test_as_str_type_error(t *testing.T) void {
 }
 
 fn test_as_int_type_error(t *testing.T) void {
-    val := Value.String{val: "hello"}
+    val := Value.String("hello")
     as_int(val) or |err| {
         testing.equal[error](t, err, error.TypeError)
         return
